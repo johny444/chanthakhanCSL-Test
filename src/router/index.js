@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes"; // Auto-generated routes
-import TeacherLayout from "@/layouts/teacherlayout.vue";
-import StudentLayout from "@/layouts/studentlayout.vue";
 
 const routesWithMeta = routes.map((route) => {
   // Assign layouts based on route path

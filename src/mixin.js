@@ -2,7 +2,6 @@ import moment from "moment";
 export default {
   data() {
     return {
-      _storeQuestion: useQuestionStore(), // Initialize the store
       store: useTodoStore(),
     };
   },
