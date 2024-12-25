@@ -9,7 +9,7 @@
       <v-row>
         <v-col></v-col>
         <v-form @submit.prevent="addTask">
-          <v-col class="Container pa-8">
+          <v-col class="Container pa-4">
             <v-text-field
               label="ENTER NEW TO DO"
               variant="outlined"
@@ -30,7 +30,7 @@
                 <v-btn type="submit" color="green">Add todo</v-btn>
               </v-col>
             </v-row>
-
+            <div class="py-3"></div>
             <!-- Render Filtered Tasks -->
             <todo-item :tasks="filteredTasks" />
           </v-col>
@@ -51,6 +51,7 @@ export default {
     return {
       newTask: {
         title: "",
+        date: this.getTime(),
         completed: false,
       },
       filterCompleted: false, // Filter flag to toggle between all/completed tasks
@@ -71,6 +72,7 @@ export default {
   methods: {
     async addTask() {
       console.log("add", this.newTask);
+      this.newTask.date = this.getTime();
       if (this.newTask.title !== "") {
         await this.store.AddTask(this.newTask); // Add the task
         this.newTask = { title: "", completed: false }; // Reset input
@@ -84,6 +86,7 @@ export default {
   },
   mounted() {
     this.store.GETLIST(); // Fetch the task list when the component mounts
+    console.log("data", this.getTime());
   },
 };
 </script>
@@ -92,8 +95,6 @@ export default {
 .Container {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   min-height: 80vh;
-  max-height: 80vh; /* Set a maximum height for the container */
   min-width: 30vw;
-  overflow-y: auto; /* Allow vertical scrolling */
 }
 </style>
