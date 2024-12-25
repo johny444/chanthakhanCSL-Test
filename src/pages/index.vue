@@ -18,11 +18,21 @@
               required
             ></v-text-field>
             <v-row>
+              <v-col>
+                <!-- Filter Button -->
+                <v-btn @click="toggleFilter" color="primary">
+                  {{
+                    filterCompleted ? "Show All Tasks" : "Show Completed Tasks"
+                  }}
+                </v-btn>
+              </v-col>
               <v-col align="end">
-                <v-btn type="submit">Add todo</v-btn>
+                <v-btn type="submit" color="green">Add todo</v-btn>
               </v-col>
             </v-row>
-            <todo-item :tasks="store.TodoList" />
+
+            <!-- Render Filtered Tasks -->
+            <todo-item :tasks="filteredTasks" />
           </v-col>
         </v-form>
         <v-col></v-col>
@@ -43,11 +53,19 @@ export default {
         title: "",
         completed: false,
       },
+      filterCompleted: false, // Filter flag to toggle between all/completed tasks
     };
   },
   computed: {
     store() {
       return useTodoStore();
+    },
+    // Filtered list of tasks based on the filter flag
+    filteredTasks() {
+      if (this.filterCompleted) {
+        return this.store.TodoList.filter((task) => task.completed);
+      }
+      return this.store.TodoList;
     },
   },
   methods: {
@@ -58,6 +76,10 @@ export default {
         this.newTask = { title: "", completed: false }; // Reset input
         await this.store.GETLIST(); // Fetch updated task list
       }
+    },
+    toggleFilter() {
+      // Toggle the filter flag to switch between completed tasks and all tasks
+      this.filterCompleted = !this.filterCompleted;
     },
   },
   mounted() {
@@ -70,6 +92,8 @@ export default {
 .Container {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   min-height: 80vh;
+  max-height: 80vh; /* Set a maximum height for the container */
   min-width: 30vw;
+  overflow-y: auto; /* Allow vertical scrolling */
 }
 </style>
