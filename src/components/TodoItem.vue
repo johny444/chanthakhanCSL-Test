@@ -60,7 +60,7 @@ export default {
     async deleteTask(taskId) {
       this.AlertStore.openAlert(
         "Q",
-        this.$t("ARE YOU SURE TO DELETE THIS TASK")
+        this.$t("ARE YOU SURE TO DELETE THIS TASK?")
       ).then(async (res) => {
         this.loadingStore.openLoading();
         await this.store.deleteTask(taskId);

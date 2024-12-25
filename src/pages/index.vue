@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <v-container>
       <v-row>
         <v-col align="center">
@@ -9,7 +9,7 @@
       <v-row>
         <v-col></v-col>
         <v-form @submit.prevent="addTask">
-          <v-col class="Container pa-4">
+          <v-col class="Container pa-4 bg-white">
             <v-text-field
               label="ENTER NEW TO DO"
               variant="outlined"
@@ -92,8 +92,14 @@ export default {
 </script>
 
 <style scoped>
+.main {
+  background-color: #cddae6;
+  min-height: 100vh;
+}
 .Container {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   min-height: 80vh;
   min-width: 30vw;
 }
