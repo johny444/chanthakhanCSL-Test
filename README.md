@@ -1,6 +1,6 @@
 # SETUP
 
-1. git clone https://github.com/
+1. git clone https://github.com/johny444/chanthakhanCSL-Test.git
 
 2. npm i
 
