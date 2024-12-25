@@ -1,132 +1,75 @@
 <template>
   <div>
-    <header>
-      <Title>{{ $t("examinationSystem") }}</Title>
-    </header>
-    <div
-      id="particles-js"
-      class="normal_gradient d-flex justify-center align-center"
-    >
-      <v-card class="loginCard rounded-xl" align="center">
-        <v-card-text>
-          <div class="mt-2" style="text-align: center">
-            <h1 class="text-secondary" style="font-size: 2.5rem">
-              {{ $t("examinationSystem") }}
-            </h1>
-          </div>
-          <div style="">
-            <img src="@/assets/images/examLogo.png" :width="300" />
-          </div>
-          <div class="ml-4">
-            <v-form @submit.prevent="onSubmit">
-              <v-text-field
-                v-model="txtUseremail"
-                :label="$t('email')"
-                prepend-inner-icon="fas fa-user"
-                rounded
-                variant="solo"
-              ></v-text-field>
-              <v-text-field
-                v-model="txtPassword"
-                :label="$t('password')"
-                prepend-inner-icon="fas fa-unlock"
-                :append-inner-icon="showPw ? 'fas fa-eye' : 'fas fa-eye-slash'"
-                :type="showPw ? 'text' : 'password'"
-                @click:append-inner="showPw = !showPw"
-                rounded
-                variant="solo"
-              ></v-text-field>
-              <v-row class="ma-0" justify="end">
-                <v-btn
-                  class="rounded-lg"
-                  type="submit"
-                  color="#1565C0"
-                  prepend-icon="fas fa-right-to-bracket"
-                  :loading="loading"
-                  @click="loading = !loading"
-                  >{{ $t("login") }}
-                </v-btn>
-                <template v-slot:loader>
-                  <v-progress-linear indeterminate></v-progress-linear>
-                </template>
-              </v-row>
-            </v-form>
-          </div>
-        </v-card-text>
-      </v-card>
-    </div>
+    <v-container>
+      <v-row>
+        <v-col align="center">
+          <h1>TODO LIST BY CHANTHAKHAN</h1>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col></v-col>
+        <v-form @submit.prevent="addTask">
+          <v-col class="Container pa-8">
+            <v-text-field
+              label="ENTER NEW TO DO"
+              variant="outlined"
+              v-model="newTask.title"
+              placeholder="Task title"
+              required
+            ></v-text-field>
+            <v-row>
+              <v-col align="end">
+                <v-btn type="submit">Add todo</v-btn>
+              </v-col>
+            </v-row>
+            <todo-item :tasks="store.TodoList" />
+          </v-col>
+        </v-form>
+        <v-col></v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-import { useUserStore } from "@/stores/user";
-import axios from "axios";
-import { useI18n } from "vue-i18n";
-import { useLoadingStore } from "@/stores/loadingStore";
+import { useTodoStore } from "@/stores/todoStore";
+import TodoList from "@/components/TodoItem.vue";
 
 export default {
+  components: { TodoList },
   data() {
     return {
-      myForm: null,
-      // txtUseremail: "teacher2@gmail.com",
-      txtUseremail: "TestB@gmail.com",
-      txtPassword: "12345",
-      showPw: false,
-      userlist: [],
-      loading: false,
+      newTask: {
+        title: "",
+        completed: false,
+      },
     };
   },
-  watch: {
-    loading(val) {
-      if (!val) return;
-
-      setTimeout(() => (this.loading = false), 2000);
+  computed: {
+    store() {
+      return useTodoStore();
     },
   },
   methods: {
-    async onSubmit() {
-      try {
-        this.loadingStore.openLoading();
-        this.$router.push("/dashboard");
-        this.loadingStore.closeLoading();
-      } catch (error) {
-        console.error("Error in form login", error);
-        // Optionally open dialog for error
+    async addTask() {
+      console.log("add", this.newTask);
+      if (this.newTask.title !== "") {
+        await this.store.AddTask(this.newTask); // Add the task
+        this.newTask = { title: "", completed: false }; // Reset input
+        await this.store.GETLIST(); // Fetch updated task list
       }
     },
   },
   mounted() {
-    this.$i18n.locale = localStorage.getItem("i18n") || "en"; // Set locale on mounted
-  },
-  created() {
-    this.storeUser = useUserStore();
-    this.loadingStore = useLoadingStore();
+    this.store.GETLIST(); // Fetch the task list when the component mounts
   },
 };
 </script>
 
-
 <style scoped>
-#particles-js {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
-  padding: 0px;
-  overflow: hidden;
-}
-.normal_gradient {
-  background: radial-gradient(circle, #35a2ff 0%, #28c2e5 100%);
-  background-image: url(@/assets/images/background.jpg);
-}
-.loginCard {
-  position: absolute;
-  width: 20%;
-  left: 10%;
-  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+.Container {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  min-height: 80vh;
+  min-width: 30vw;
 }
 </style>
-
-
